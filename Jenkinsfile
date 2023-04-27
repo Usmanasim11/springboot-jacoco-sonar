@@ -52,26 +52,26 @@ pipeline {
              }
          }
         
-        stage('Docker') {
-            steps {
-                sh 'docker version'
-                sh 'docker build -t ahmedsystems/springbootjacoco:0.0.1 -f Dockerfile .'
-                withDockerRegistry(credentialsId: 'ahmedsystems-dockerhub', url: 'https://index.docker.io/v1/') {
-                sh 'docker push ahmedsystems/springbootjacoco:0.0.1'
-                }
-             }
-         }
-        
-//         stage('Image push to local Docker registry') {
+//         stage('Docker') {
 //             steps {
 //                 sh 'docker version'
-//                 sh 'docker build -t docker-registry:5000/springbootjacoco:0.0.1 -f Dockerfile .'
-//                 withDockerRegistry(credentialsId: 'docker_reg_cred_k8', url:'https://docker-registry:5000/v2/') 
-//                  {
-//                  sh 'docker push docker-registry:5000/springbootjacoco:0.0.1'
-//                  }
+//                 sh 'docker build -t ahmedsystems/springbootjacoco:0.0.1 -f Dockerfile .'
+//                 withDockerRegistry(credentialsId: 'ahmedsystems-dockerhub', url: 'https://index.docker.io/v1/') {
+//                 sh 'docker push ahmedsystems/springbootjacoco:0.0.1'
+//                 }
 //              }
 //          }
+        
+        stage('Image push to local Docker registry') {
+            steps {
+                sh 'docker version'
+                sh 'docker build -t dockerregistry.com:5000/springbootjacoco:0.0.1 -f Dockerfile .'
+                withDockerRegistry(credentialsId: 'dockerlocalregistry-cred', url: 'https://dockerregistry.com:5000/v2/') 
+                 {
+                 sh 'docker push dockerregistry.com:5000/springbootjacoco:0.0.1'
+                 }
+             }
+         }
         // stage('Deploy to K8 Cluster') {
         //     steps {
         //         sshagent(['k8s_master_ssh_key']) {
