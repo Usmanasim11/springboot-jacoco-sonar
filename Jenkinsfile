@@ -2,11 +2,6 @@ pipeline {
     agent any
     
     stages {
-//         stage('Checkout') {
-//             steps {
-//                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/mhassanmanzoorsl/spring-boot-jacoco.git']])
-//             }
-//         }
 
         stage('Build') {
             steps {
@@ -41,17 +36,7 @@ pipeline {
                  }
              }
          }
-        
-//         stage('Docker') {
-//             steps {
-//                 sh 'docker version'
-//                 sh 'docker build -t ahmedsystems/springbootjacoco:0.0.1 -f Dockerfile .'
-//                 withDockerRegistry(credentialsId: 'ahmedsystems-dockerhub', url: 'https://index.docker.io/v1/') {
-//                 sh 'docker push ahmedsystems/springbootjacoco:0.0.1'
-//                 }
-//              }
-//          }
-        
+           
         stage('Image push to local Docker registry') {
             steps {
                 sh 'docker version'
