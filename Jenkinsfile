@@ -6,7 +6,7 @@ pipeline {
         stage('Build') {
             steps {
                // sh 'mvn -version'
-                sh '/opt/maven/bin/mvn clean install'
+                sh 'mvn clean install'
                 sh 'mvn clean package'
                // sh 'mvn clean package -Dmaven.test.failure.ignore=true'
             }
