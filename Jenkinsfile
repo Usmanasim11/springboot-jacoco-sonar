@@ -1,8 +1,8 @@
 pipeline {
     agent any
-    tools {
-      maven 'maven'
-  }
+//     tools {
+//       maven 'maven'
+//   }
     stages {
 
         stage('Build') {
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonarqube') {
                     sh '''
-                        mvn clean verify sonar:sonar -Dsonar.projectKey=Spring-Boot -Dsonar.host.url=http://40.88.142.73:9000 -Dsonar.login=sqp_6cbab81b6b5aa2afe0fa97689c409c2f16f4f241
+                        mvn clean verify sonar:sonar -Dsonar.projectKey=sonar-test -Dsonar.host.url=http://20.54.72.51:9000 -Dsonar.login=sqp_8fa44604d7edcf790520f25646f75cbb574b7e53
                     '''
                  }
              }
