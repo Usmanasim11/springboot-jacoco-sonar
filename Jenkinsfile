@@ -34,7 +34,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonarqube') {
                     sh '''
-                        mvn clean verify sonar:sonar -Dsonar.projectKey=sonar-maven -Dsonar.host.url=http://20.102.67.142:9000 -Dsonar.login=sqp_ed3f8bd8268695c62a75b456d1b339c4c4225b64
+                        mvn clean verify sonar:sonar -Dsonar.projectKey=Spring-Boot -Dsonar.host.url=http://40.88.142.73:9000 -Dsonar.login=sqp_6cbab81b6b5aa2afe0fa97689c409c2f16f4f241
                     '''
                  }
              }
