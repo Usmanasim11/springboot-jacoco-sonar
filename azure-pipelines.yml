@@ -1,22 +1,46 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
-- master
+  branches:
+    include:
+    - master
+stages:
+- stage: __default
+  jobs:
+  - job: Job
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: CmdLine@2
+      displayName: 'Build and package Maven project'
+      inputs:
+        script: 'mvn clean package'
+    - task: CopyFiles@2
+      displayName: 'Copy pom.xml to common folder'
+      inputs:
+        SourceFolder: '$(system.defaultworkingdirectory)'
+        Contents: '**/pom.xml'
+        TargetFolder: '$(build.artifactstagingdirectory)/common'
+      condition: succeededOrFailed()
+    - task: CmdLine@2
+      displayName: 'Move JAR files to common folder'
+      condition: succeededOrFailed()
+      inputs:
+        script: 'mv $(System.DefaultWorkingDirectory)/**/*.jar $(Build.ArtifactStagingDirectory)/common'
+    - task: CmdLine@2
+      displayName: 'List contents of common folder'
+      inputs:
+        script: 'ls $(build.artifactstagingdirectory)/common'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifacts'
+      inputs:
+        PathtoPublish: '$(build.artifactstagingdirectory)/common'
+        ArtifactName: 'Java Artifacts'
+        publishLocation: 'Container'
+    - task: MavenAuthenticate@0
+      inputs:
+        mavenServiceConnections: 'maven-artifacts'
+      displayName: 'Authenticate with Azure DevOps Artifacts'
+    - task: CmdLine@2
+      displayName: 'Publish artifacts to Azure DevOps Artifacts'
+      inputs:
+        script: 'mvn deploy'
 
-pool:
-  vmImage: ubuntu-latest
-
-steps:
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
